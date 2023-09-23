@@ -1,0 +1,6 @@
+Dear %RECIPIENT%,
+
+Here's a message for you!
+
+Have a nice day,
+Sender
