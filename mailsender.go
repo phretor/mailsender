@@ -17,6 +17,7 @@ func main() {
 	from := os.Getenv("FROM")
 	from_name := os.Getenv("FROM_NAME")
 	subj := os.Getenv("SUBJ")
+	dryRun := os.Getenv("DRYRUN")
 
 	// smtp server configuration.
 	smtpUser := os.Getenv("SMTP_USER")
@@ -79,17 +80,21 @@ func main() {
 			body
 
 		// Sending email.
-		err = smtp.SendMail(
-			smtpHost + ":" + smtpPort,
-			auth,
-			from,
-			[]string{to},
-			[]byte(msg))
-
-		if err != nil {
-			log.Fatal(err)
+		if (len(dryRun) > 0) {
+			fmt.Println("DRY RUN: " + from + " -> " + to)
 		} else {
-			fmt.Println(from + " -> " + to)
+			err = smtp.SendMail(
+				smtpHost + ":" + smtpPort,
+				auth,
+				from,
+				[]string{to},
+				[]byte(msg))
+
+			if err != nil {
+				log.Fatal(err)
+			} else {
+				fmt.Println(from + " -> " + to)
+			}
 		}
 
 		time.Sleep(1 * time.Second)
